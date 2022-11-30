@@ -31,11 +31,29 @@ class HomeController extends Controller
 
     public function editProfile()
     {
+        /**
+         * Memuat view update profile yang mana 
+         * pada view tersebut kita memiliki 2 form 
+         * 1. Untuk update data users
+         * 2. Untuk update password 
+         */
         return view('update-profile');
     }
 
     public function updateProfile(Request $request)
     {
+        /**
+         * Untuk method ini jika user menambahkan inputan berupa gambar
+         * lakukan proses pengecekan apakah user tersebut sudah menyimpan
+         * gambar sebelumnya. Jika ada hapus gambar tersebut dan ganti
+         * dengan file gambar yang baru.
+         * 
+         * Disini proses validasi bisa ditambahkan menggunakan method validate()
+         * atau menggunakan form request.
+         * sesuaikan dengan keperluan masing-masing
+         * 
+         */
+        
         $userImage = User::findOrFail(auth()->user()->id);
 
         if ($request->hasFile('image')) {
@@ -48,16 +66,26 @@ class HomeController extends Controller
             $userImage->image = $uploadFile;
         }
 
+        /**
+         * Menjalankan proses update table users
+         */
         $userImage->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
         ]);
-        // return dd($user);
+       
         return to_route('edit-profile');
     }
     
     public function updatePassword(Request $request)
     {
+        /**
+         * Pada method ini kita menjalankan proses update password
+         * dengan helper bcrypt kita melakukan proses enkripsi data password
+         * yang di inputkan pada properti input dengan name-nya new_password
+         * 
+         * Silahkan tambahkan validasi sesuai keperluan masing-masing. 
+         */
         $request->user()->update([
             'password' => bcrypt($request->input('new_password'))
         ]);

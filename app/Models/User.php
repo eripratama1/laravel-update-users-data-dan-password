@@ -21,10 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'image-profile',
-        'username'
+        'image', /** Menambahkan field baru pada method fillable */
     ];
 
+    /**
+     * Membuat accessor getImage
+     * Ketika user memiliki gambar tampilkan gambar yang tersimpan pada 
+     * folder imageProfile. Jika user tidak menyimpan gambar muat gambar template
+     * dari url yang sudah di definisikan seperti dibawah.
+     */
     public function getImage()
     {
         if (substr($this->image,0,5) == "https") {
